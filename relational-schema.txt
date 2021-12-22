@@ -1,0 +1,7 @@
+tutorial_session(FK tutor_id, FK tutee_id, time_slot, subject)
+tutor(PK tutor_id, first_name, last_name, upmail, program, year_level)
+tutee(PK tutee_id, first_name, last_name, upmail, program, year_level, password)
+tutor_teaches(FK tutor_id, FK subject_id)
+subject(PK subject_id, title)
+tutor_available_time(FK available_time_id, FK tutor_id)
+available_time(PK available_time_id, start_time, end_time)
