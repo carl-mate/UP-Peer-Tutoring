@@ -88,7 +88,36 @@
 		}
 	}
 
-    // login
+	// admin login
+	if(isset($_POST['admin-login'])){
+		$adminEmail = mysqli_real_escape_string($db, $_POST['adminEmail']);
+		$adminPassword = mysqli_real_escape_string($db, $_POST['adminPassword']);
+
+		// make sure all fields are filled
+		if(empty($adminEmail)){
+			array_push($errors, "Admin Email is required.");	// add error message to errors array
+		}
+		if(empty($adminPassword)){
+			array_push($errors, "Admin Password is required.");	// add error message to errors array
+		}
+
+		if(count($errors) == 0){
+			$adminPassword = md5($adminPassword);		// encrypt password before comparing to database
+			$query = "SELECT * FROM admin WHERE email='$adminEmail' AND password='$adminPassword'";
+			$result = mysqli_query($db, $query);
+			if(mysqli_num_rows($result) == 1){
+				// log user in
+                echo "SUCCESS";
+				$_SESSION['adminEmail'] = $adminEmail;
+				$_SESSION['success'] = "You are now logged in.";
+				header('location: admin-index.php');		// redirect to home
+			} else{
+				array_push($errors, "Incorrect email/password combination.");
+			}
+		}
+	}
+
+    // log session
 	if(isset($_POST['logsession'])){
 		$tutor_upmail = mysqli_real_escape_string($db, $_POST['upmail']);
 		$date = mysqli_real_escape_string($db, $_POST['date']);
@@ -154,6 +183,13 @@
 		session_destroy();
 		unset($_SESSION['upmail']);
 		header('location: login.php');
+	}
+
+	// admin logout
+	if(isset($_GET['admin-logout'])){
+		session_destroy();
+		unset($_SESSION['adminEmail']);
+		header('location: admin-login.php');
 	}
 
 	// function to check if inputted email is a valid upmail

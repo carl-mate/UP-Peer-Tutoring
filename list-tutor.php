@@ -1,9 +1,4 @@
-<?php include("top.html"); include("server.php"); 
-    // if user is not logged in, they cannot access this page
-    if(empty($_SESSION['upmail'])){
-        header('location: login.php');
-    }
-?>
+<?php include("top.html"); include("server.php"); ?>
 
 <?php
 if(isset($_GET['subject'])){

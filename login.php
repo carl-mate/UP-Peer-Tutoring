@@ -11,7 +11,7 @@
         <input type="submit" name="login" />
       </form>
  </div>
-    <p class="p-below">Don't have an account? <a href="signup.php">Sign Up Here</a>
-    </p>
+    <p class="p-below">Don't have an account? <a href="signup.php">Sign Up Here</a></p>
+    <p class="p-below">Are you an admin? <a href="admin-login.php">Log In Here</a></p>
   </body>
 </html>
