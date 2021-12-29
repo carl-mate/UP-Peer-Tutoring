@@ -1,63 +1,54 @@
 <?php include("top.html"); include("server.php");
 
-    // if user is not logged in, they cannot access this page
-	if(empty($_SESSION['adminEmail'])){
-		header('location: admin-login.php');
-	}
+// if user is not logged in, they cannot access this page
+if(empty($_SESSION['adminEmail'])){
+    header('location: admin-login.php');
+}
 ?>
 
 <p id="result">Viewing all sessions.</p>
-
 <?php
-	$query = "SELECT tutee_id, first_name, last_name, program FROM tutee";
-	$result = mysqli_query($db, $query);
+//Fetch all tutorial_session
+$query = "SELECT * FROM tutorial_session";
+$result = mysqli_query($db, $query);
 
-	$tutee_id = 0;
-	$first_name = "";
-	$last_name = "";
-	foreach($result as $row){
-	    $tutee_id = $row['tutee_id'];
-	    $first_name = $row['first_name'];
-	    $last_name = $row['last_name'];
-	    ?>
-	    <!-- display the tutee's name -->
-	    <p id="result"><strong><?=$first_name . " " . $last_name . "'s "?></strong>sessions.</p>
-	    <?php
-	    //Find all sessions of the tutee  
-		$sessionQuery = "SELECT * FROM tutorial_session WHERE tutee_id=$tutee_id";
-		$sessionResult = mysqli_query($db, $sessionQuery);
+$tutor_id = 0;
+$tutee_id = 0;
+$i = 1;
+?>
+ <!--Table here --->
+<table>
+<tr><th>#</th><th>Tutor</th><th>Tutee</th><th>Date</th><th>Start time</th><th>End time</th><th>Subject</th></tr>
+<?php
+foreach($result as $sessionRow){
+    $tutor_id = $sessionRow['tutor_id'];
+    $tutee_id = $sessionRow['tutee_id'];
+    //Get the tutor_id name
+    $tutorNameQuery = "SELECT first_name, last_name FROM tutor WHERE tutor_id='" . $tutor_id . "'";
+    $tutorNameResult = mysqli_query($db, $tutorNameQuery);
+    $tutorNameArray = array();
+    foreach($tutorNameResult as $row){
+        $tutorNameArray[] = $row['first_name'] . " " . $row['last_name'];
+    }
+    //Get the tutee_id name
+    $tuteeNameQuery = "SELECT first_name, last_name FROM tutee WHERE tutee_id='" . $tutee_id . "'";
+    $tuteeNameResult = mysqli_query($db, $tuteeNameQuery);
+    $tuteeNameArray = array();
+    foreach($tuteeNameResult as $row){
+        $tuteeNameArray[] = $row['first_name'] . " " . $row['last_name'];;
+    }
+?>
+ <tr><td><?=$i?></td><td><?=$tutorNameArray[0]?></td><td><?=$tuteeNameArray[0]?></td><td><?=$sessionRow['date']?></td><td><?=$sessionRow['start_time']?></td><td><?=$sessionRow['end_time']?></td><td><?=$sessionRow['subject']?></td></tr>
+<?php 
+    $i++;
+} ?>
+    </table>
 
-		foreach($sessionResult as $sessionResultRow){
-		$tutor_id = $sessionResultRow['tutor_id'];
-		$tutorNameQuery = "SELECT first_name, last_name
-		    FROM tutor 
-		    WHERE tutor_id=$tutor_id";
-		$tutorNameResult = mysqli_query($db, $tutorNameQuery);
-
-
-		foreach($tutorNameResult as $tutorNameRow){
-		?>
-		<div class="match">
-		        <p>
-		        <img src="images/user.png" width=150 alt="User" /><span><?=$tutorNameRow['first_name'] . " " . $tutorNameRow['last_name']?></span>
-		        </p>
-
-		        <ul>
-		            <li><?="<strong>Date: </strong>" . $sessionResultRow['date']?></li>
-		            <li><?="<strong>Start time: </strong>" . date('h:i:s a', strtotime($sessionResultRow['start_time']))?></li>
-		            <li><?="<strong>End time: </strong>" . date('h:i:s a', strtotime($sessionResultRow['end_time']))?></li>
-		            <li><?="<strong>Subject: </strong>" . $sessionResultRow['subject']?></li>
-		        </ul>
-		</div>
-		<?php }
-		} ?>
-		
-	<?php } ?>
-	<div class="container">
-		     <div class="center">
-		        <p><a href="admin-index.php" class="button">Back</a></p>
-		     </div>
-	</div>
+    <div class="container">
+             <div class="center">
+                <p><a href="admin-index.php" class="button">Back</a></p>
+             </div>
+    </div>
 
 </body>
 </html>
