@@ -102,8 +102,8 @@
 		}
 
 		if(count($errors) == 0){
-			$adminPassword = md5($adminPassword);		// encrypt password before comparing to database
-			$query = "SELECT * FROM admin WHERE email='$adminEmail' AND password='$adminPassword'";
+			//$adminPassword = md5($adminPassword);		// encrypt password before comparing to database
+			$query = "SELECT * FROM admin WHERE upmail='$adminEmail' AND password='$adminPassword'";
 			$result = mysqli_query($db, $query);
 			if(mysqli_num_rows($result) == 1){
 				// log user in
