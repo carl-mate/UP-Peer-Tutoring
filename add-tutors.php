@@ -32,6 +32,14 @@ if(empty($_SESSION['adminEmail'])){
         <input type="email" name="upmail" placeholder="jprizal@up.edu.ph" />
         <label>Tutor's Subject</label>
         <input type="text" name="tutorsubject" placeholder="" />
+        <label>Tutor's Available Schedule</label>
+        <label>Date</label>
+        <input type="date" name="date" placeholder="" />
+        <label>Start time</label>
+        <input type="time" name="starttime" placeholder="" />
+        <label>End time</label>
+        <input type="time" name="endtime" placeholder="" />
+
         <input type="submit" name="addtutor" />
       </form>
 </div>

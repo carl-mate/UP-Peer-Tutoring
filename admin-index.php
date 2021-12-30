@@ -26,6 +26,10 @@
                     <div class="center">
                     <a href="view-sessions.php" class="button">View sessions</a>
                     <a href="view-accounts.php" class="button">View accounts</a>
+                    <a href="view-subjects.php" class="button">View subjects</a>
+                    <a href="add-tutors.php" class="button">Add tutors</a>
+                    <a href="add-subjects.php" class="button">Add subjects</a>
+                    <a href="" class="button">Remove accounts</a>
                     <a href="admin-index.php?admin-logout='1'" class="button">Logout</a>
                     </div>
                 </div>

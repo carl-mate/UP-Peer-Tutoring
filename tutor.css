@@ -234,3 +234,10 @@ td {
 tr:nth-child(even) {
     background-color: #dad9d4;
 }
+
+caption {
+    font-size: 24pt;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    text-align: center;
+}
