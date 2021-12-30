@@ -4,41 +4,26 @@
 	if(empty($_SESSION['adminEmail'])){
 		header('location: admin-login.php');
 	}
-
-// Display tutors by program (BS in Computer Science, BS in Biology)
-
-$programArray = array();
-$programQuery = "SELECT DISTINCT program FROM tutor";
-$programResult = mysqli_query($db, $programQuery);
-
-foreach($programResult as $row){
-    $programArray[] = $row['program'];
-}
-
 ?>
-<div class = "content">
-	<p class="big-paragraph">Hello, <strong>Admin</strong>. Which program and student type do you wish to view?</p>
-	<form action="list-accounts.php" method="get">
-		<label>Program</label>
-	    <select name="program">
-	    	<option selected="selected"><?=$programArray[0]?></option>
-		<?php
-		for($i = 1; $i < count($programArray); $i++) {
-		?>
-		    <option><?=$programArray[$i]?></option>
-		<?php } ?>
-	    </select>
-	    <label>Student Type</label>
-	    <select name="studentType">
-	    	<option selected="selected">Tutor</option>
-	    	<option>Tutee</option>
-	    </select>
 
-		<input type="submit" name="view" />
-	    </div>
-	</form>
-</div>
+<p id="result">Viewing all accounts.</p>
+<?php
+//Fetch all tutees
+$tuteeQuery = "SELECT * FROM tutee";
+$tuteeResult = mysqli_query($db, $tuteeQuery);
 
+$i = 1;
+?>
+<table>
+<tr><th>#</th><th>First Name</th><th>Last Name</th><th>UP Mail</th><th>Program</th><th>Year Level</th><th>Type</th></tr>
+<?php
+while($row = mysqli_fetch_array($tuteeResult)){
+?>
+    <tr><td><?=$i?></td><td><?=$row['first_name']?></td><td><?=$row['last_name']?></td><td><?=$row['upmail']?></td><td><?=$row['program']?></td><td><?=$row['year_level']?></td><td>Tutee</td></tr>
+<?php
+}
+?>
+</table>
 <div class="container">
      <div class="center">
         <p><a href="admin-index.php" class="button">Back</a></p>
