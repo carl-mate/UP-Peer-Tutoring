@@ -6,7 +6,7 @@
 	$upmail = "";
 	$errors = array();
 	// connect to database
-	$db = mysqli_connect('localhost', 'root', 'Mu612216');
+	$db = mysqli_connect('localhost', 'root', '');
     mysqli_select_db($db, 'tutor');
 
 	// if register button is clicked
@@ -102,8 +102,8 @@
 		}
 
 		if(count($errors) == 0){
-			//$adminPassword = md5($adminPassword);		// encrypt password before comparing to database
-			$query = "SELECT * FROM admin WHERE upmail='$adminEmail' AND password='$adminPassword'";
+			$adminPassword = md5($adminPassword);		// encrypt password before comparing to database
+			$query = "SELECT * FROM admin WHERE email='$adminEmail' AND password='$adminPassword'";
 			$result = mysqli_query($db, $query);
 			if(mysqli_num_rows($result) == 1){
 				// log user in
@@ -175,6 +175,34 @@
 			mysqli_query($db, $sql);
 			$_SESSION['success'] = "Thank you for logging session.";
 			header('location: index.php'); // redirect to home
+		}
+	}
+
+	// add subject for admins
+	if(isset($_POST['add'])){
+		$title = mysqli_real_escape_string($db, $_POST['title']);
+		$uppercaseTitle = strtoupper($title);
+		$program = mysqli_real_escape_string($db, $_POST['program']);
+		$checkUniqueness = "SELECT * FROM subject WHERE title = '$title' AND program = '$program' LIMIT 1";
+		$resultUniqueness = mysqli_query($db, $checkUniqueness);
+
+		// make sure all fields are filled
+		if(empty($title)){
+			array_push($errors, "Title is required.");	// add error message to errors array
+		}
+        
+		// check if subject/program combination is unique and does not already exist in db
+		if(mysqli_num_rows($resultUniqueness) > 0){
+			array_push($errors, "Subject-Program combination already exists."); // add error message to array
+		}
+
+		// if there are no errors, save subject to database
+		if(count($errors) == 0){
+			$sql = "INSERT INTO subject (title, program)
+					VALUES('$uppercaseTitle', '$program')";
+			mysqli_query($db, $sql);
+			$_SESSION['success'] = "Subject added succesfully.";
+			header('location: admin-index.php'); // redirect to home
 		}
 	}
 
