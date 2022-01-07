@@ -6,7 +6,7 @@
 	$upmail = "";
 	$errors = array();
 	// connect to database
-	$db = mysqli_connect('localhost', 'root', 'Mu612216');
+	$db = mysqli_connect('localhost', 'root', '');
     mysqli_select_db($db, 'tutor');
 
 	// if register button is clicked
@@ -47,12 +47,24 @@
 			array_push($errors, "Invalid email.");
 		}
 
+		// // if there are no errors, save user to database
+		// if(count($errors) == 0){
+		// 	$password = md5($password);	// encrypt password before storing in database (security)
+		// 	$sql = "INSERT INTO tutee (first_name, last_name, upmail, program, year_level, password)
+		// 			VALUES('$firstname', '$lastname', '$upmail', '$program', '$yearlevel', '$password')";
+		// 	mysqli_query($db, $sql);
+		// 	$_SESSION['upmail'] = $upmail;
+		// 	$_SESSION['success'] = "You are now logged in.";
+		// 	header('location: index.php'); // redirect to home
+		// }
+
 		// if there are no errors, save user to database
 		if(count($errors) == 0){
-			$password = md5($password);	// encrypt password before storing in database (security)
-			$sql = "INSERT INTO tutee (first_name, last_name, upmail, program, year_level, password)
-					VALUES('$firstname', '$lastname', '$upmail', '$program', '$yearlevel', '$password')";
-			mysqli_query($db, $sql);
+			$password = md5($password); // encrypt password before storing in database (security)
+			$statement = $db->prepare("INSERT INTO tutee (first_name, last_name, upmail, program, year_level, password)
+									   VALUES(?, ?, ?, ?, ?, ?)");
+			$statement->bind_param("ssssis", $firstname, $lastname, $upmail, $program, $yearlevel, $password);
+			$statement->execute();
 			$_SESSION['upmail'] = $upmail;
 			$_SESSION['success'] = "You are now logged in.";
 			header('location: index.php'); // redirect to home
@@ -73,10 +85,13 @@
 		}
 
 		if(count($errors) == 0){
-			$password = md5($password);		// encrypt password before comparing to database
-			$query = "SELECT * FROM tutee WHERE upmail='$upmail' AND password='$password'";
-			$result = mysqli_query($db, $query);
-			if(mysqli_num_rows($result) == 1){
+			$password = md5($password);
+			$statement = $db->prepare("SELECT * FROM tutee WHERE upmail=? AND password=?");
+			$statement->bind_param("ss", $upmail, $password);
+			$statement->execute();
+			$statement->store_result();
+			$statement->bind_result($tutee_id, $first_name, $last_name, $upmail, $program, $year_level, $password);
+			if($statement->num_rows() == 1){
 				// log user in
                 echo "SUCCESS";
 				$_SESSION['upmail'] = $upmail;
@@ -102,10 +117,12 @@
 		}
 
 		if(count($errors) == 0){
-			//$adminPassword = md5($adminPassword);		// encrypt password before comparing to database
-			$query = "SELECT * FROM admin WHERE upmail='$adminEmail' AND password='$adminPassword'";
-			$result = mysqli_query($db, $query);
-			if(mysqli_num_rows($result) == 1){
+			$statement = $db->prepare("SELECT * FROM admin WHERE upmail=? AND password=?");
+			$statement->bind_param("ss", $adminEmail, $adminPassword);
+			$statement->execute();
+			$statement->store_result();
+			$statement->bind_result($admin_id, $upmail, $password);
+			if($statement->num_rows() == 1){
 				// log user in
                 echo "SUCCESS";
 				$_SESSION['adminEmail'] = $adminEmail;
