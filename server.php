@@ -178,6 +178,34 @@
 		}
 	}
 
+    // add subject for admins
+	if(isset($_POST['addsubject'])){
+		$title = mysqli_real_escape_string($db, $_POST['title']);
+		$uppercaseTitle = strtoupper($title);
+		$program = mysqli_real_escape_string($db, $_POST['program']);
+		$checkUniqueness = "SELECT * FROM subject WHERE title = '$title' AND program = '$program' LIMIT 1";
+		$resultUniqueness = mysqli_query($db, $checkUniqueness);
+
+		// make sure all fields are filled
+		if(empty($title)){
+			array_push($errors, "Title is required.");	// add error message to errors array
+		}
+
+		// check if subject/program combination is unique and does not already exist in db
+		if(mysqli_num_rows($resultUniqueness) > 0){
+			array_push($errors, "Subject-Program combination already exists."); // add error message to array
+		}
+
+		// if there are no errors, save subject to database
+		if(count($errors) == 0){
+			$sql = "INSERT INTO subject (title, program)
+					VALUES('$uppercaseTitle', '$program')";
+			mysqli_query($db, $sql);
+			$_SESSION['success'] = "Subject added succesfully.";
+			header('location: admin-index.php'); // redirect to home
+		}
+	}
+
 	// logout
 	if(isset($_GET['logout'])){
 		session_destroy();

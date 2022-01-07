@@ -1,15 +1,15 @@
-<?php include("top.html"); include("server.php");
+<?php include("has-session-top.html"); include("server.php");
 
-    // if user is not logged in, they cannot access this page
-	if(empty($_SESSION['upmail'])){
-        echo("REACHED HERE");
-		header('location: login.php');
-	}
+// if user is not logged in, they cannot access this page
+if(empty($_SESSION['upmail'])){
+    echo("REACHED HERE");
+    header('location: login.php');
+}
 ?>
 
 <div class="sidebar">
     <div class="logo-details">
-        <i class='bx bx-book-open'></i>
+        <img src="images/tutor.png" alt="banner logo" />
         <span class="logo_name">UP Peer Tutoring</span>
     </div>
     <ul class="nav-links">
@@ -64,9 +64,18 @@
             <div class="box">
                 <div class="left-side">
                     <div class="box_topic">
-                    <p>
-                    Find Tutor
-                    </p>
+            <?php if(isset($_SESSION['success'])): ?>
+                <div class="error success">
+                    <h4>
+<?php 
+echo $_SESSION['success'];
+unset($_SESSION['success']);
+?>
+                    </h4>
+                </div>
+            <?php endif ?>
+                        <h3>Welcome, <?=$_SESSION['upmail']?></h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                     </div>
                 </div>
             </div>

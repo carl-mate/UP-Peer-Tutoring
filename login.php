@@ -1,4 +1,4 @@
-<?php include("top.html"); include("server.php"); ?>
+<?php include("no-session-top.html"); include("server.php"); ?>
  <div class="login-box">
       <h1 id="login">Login</h1>
       <form action="login.php" method="post">

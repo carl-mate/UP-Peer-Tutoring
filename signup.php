@@ -1,4 +1,4 @@
-<?php include("top.html"); include("server.php"); ?>
+<?php include("no-session-top.html"); include("server.php"); ?>
 <div class="signup-box">
       <h1 id="signup">Sign Up</h1>
       <form action="signup.php" method="post">

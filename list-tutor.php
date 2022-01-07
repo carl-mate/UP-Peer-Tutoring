@@ -6,7 +6,7 @@ if(isset($_GET['subject'])){
 }
 ?>
 
-<p id="result">Available tutors for <strong><?=$subject?></strong>.</p>
+<!--<p id="result">Available tutors for <strong><?=$subject?></strong>.</p>-->
 <?php
 
 //Find all tutors that teaches the given subject
@@ -18,7 +18,67 @@ $query = "SELECT t.tutor_id, t.first_name, t.last_name, t.upmail, t.program, t.y
     ON tt.subject_id=s.subject_id
     WHERE title='$subject'";
 $result = mysqli_query($db, $query);
+?>
 
+<div class="sidebar">
+    <div class="logo-details">
+        <img src="images/tutor.png" alt="banner logo" />
+        <span class="logo_name">UP Peer Tutoring</span>
+    </div>
+    <ul class="nav-links">
+        <li>
+            <a href="index.php">
+                <i class='bx bx-grid-alt' ></i>
+                <span class="link_name">Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="find-tutor.php">
+                <i class='bx bx-user-circle' ></i>
+                <span class="link_name">Find Tutor</span>
+            </a>
+        </li>
+        <li>
+            <a href="log-session.php">
+                <i class='bx bx-pencil' ></i>
+                <span class="link_name">Log Session</span>
+            </a>
+        </li>
+        <li>
+            <a href="my-sessions.php">
+                <i class='bx bx-list-ul' ></i>
+                <span class="link_name">My Sessions</span>
+            </a>
+        </li>
+        <li>
+            <a href="index.php?logout='1'">
+                <i class='bx bx-log-out' ></i>
+                <span class="link_name">Log out</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<section class="home-section">
+    <nav>
+        <div class="sidebar-button">
+           <i class='bx bx-menu sidebarBtn' ></i> 
+            <span class="dashboard">Dashboard</span>
+        </div>
+        <div class="profile-details">
+            <img src="images/user.png" alt="">
+            <span class="user"><?=$_SESSION['upmail']?></span>
+           <!--<i class='bx bx-chevron-down' ></i>--> 
+        </div>
+    </nav>
+
+    <div class="home-content">
+        <div class="overview-boxes">
+            <div class="box">
+                <div class="left-side">
+                    <div class="box_topic">
+<p id="result">Available tutors for <strong><?=$subject?></strong>.</p><br /><br />
+<?php
 foreach($result as $row){
 ?>
 <div class="match">
@@ -57,12 +117,15 @@ foreach($result as $row){
             </li>
         </ul>
 </div>
-<?php } ?>
-<div class="container">
-     <div class="center">
-        <p><a href="find-tutor.php" class="button">Back</a></p>
-     </div>
-</div>
+<?php } ?>                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script src="script.js"></script>
 
 </body>
 </html>

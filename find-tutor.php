@@ -1,8 +1,8 @@
-<?php include("top.html"); include("server.php"); 
+<?php include("has-session-top.html"); include("server.php"); 
 // if user is not logged in, they cannot access this page
-    if(empty($_SESSION['upmail'])){
-        header('location: login.php');
-    }
+if(empty($_SESSION['upmail'])){
+    header('location: login.php');
+}
 
 $query = "SELECT first_name, last_name, program FROM tutee WHERE upmail='" . $_SESSION['upmail'] . "'";
 $result = mysqli_query($db, $query);
@@ -15,17 +15,16 @@ foreach($result as $row){
 }
 
 ?>
-<h1>Find and connect with a tutor!</h1>
 
 
 <div class="sidebar">
     <div class="logo-details">
-        <i class='bx bx-book-open'></i>
+        <img src="images/tutor.png" alt="banner logo" />
         <span class="logo_name">UP Peer Tutoring</span>
     </div>
     <ul class="nav-links">
         <li>
-            <a href="#">
+            <a href="index.php">
                 <i class='bx bx-grid-alt' ></i>
                 <span class="link_name">Dashboard</span>
             </a>
