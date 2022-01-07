@@ -6,7 +6,7 @@
 	$upmail = "";
 	$errors = array();
 	// connect to database
-	$db = mysqli_connect('localhost', 'root', 'Mu612216');
+	$db = mysqli_connect('localhost', 'root', '');
     mysqli_select_db($db, 'tutor');
 
 	// if register button is clicked
@@ -47,12 +47,24 @@
 			array_push($errors, "Invalid email.");
 		}
 
+		// // if there are no errors, save user to database
+		// if(count($errors) == 0){
+		// 	$password = md5($password);	// encrypt password before storing in database (security)
+		// 	$sql = "INSERT INTO tutee (first_name, last_name, upmail, program, year_level, password)
+		// 			VALUES('$firstname', '$lastname', '$upmail', '$program', '$yearlevel', '$password')";
+		// 	mysqli_query($db, $sql);
+		// 	$_SESSION['upmail'] = $upmail;
+		// 	$_SESSION['success'] = "You are now logged in.";
+		// 	header('location: index.php'); // redirect to home
+		// }
+
 		// if there are no errors, save user to database
 		if(count($errors) == 0){
-			$password = md5($password);	// encrypt password before storing in database (security)
-			$sql = "INSERT INTO tutee (first_name, last_name, upmail, program, year_level, password)
-					VALUES('$firstname', '$lastname', '$upmail', '$program', '$yearlevel', '$password')";
-			mysqli_query($db, $sql);
+			$password = md5($password); // encrypt password before storing in database (security)
+			$statement = $db->prepare("INSERT INTO tutee (first_name, last_name, upmail, program, year_level, password)
+									   VALUES(?, ?, ?, ?, ?, ?)");
+			$statement->bind_param("ssssis", $firstname, $lastname, $upmail, $program, $yearlevel, $password);
+			$statement->execute();
 			$_SESSION['upmail'] = $upmail;
 			$_SESSION['success'] = "You are now logged in.";
 			header('location: index.php'); // redirect to home
@@ -73,10 +85,13 @@
 		}
 
 		if(count($errors) == 0){
-			$password = md5($password);		// encrypt password before comparing to database
-			$query = "SELECT * FROM tutee WHERE upmail='$upmail' AND password='$password'";
-			$result = mysqli_query($db, $query);
-			if(mysqli_num_rows($result) == 1){
+			$password = md5($password);
+			$statement = $db->prepare("SELECT * FROM tutee WHERE upmail=? AND password=?");
+			$statement->bind_param("ss", $upmail, $password);
+			$statement->execute();
+			$statement->store_result();
+			$statement->bind_result($tutee_id, $first_name, $last_name, $upmail, $program, $year_level, $password);
+			if($statement->num_rows() == 1){
 				// log user in
                 echo "SUCCESS";
 				$_SESSION['upmail'] = $upmail;
@@ -102,10 +117,12 @@
 		}
 
 		if(count($errors) == 0){
-			//$adminPassword = md5($adminPassword);		// encrypt password before comparing to database
-			$query = "SELECT * FROM admin WHERE upmail='$adminEmail' AND password='$adminPassword'";
-			$result = mysqli_query($db, $query);
-			if(mysqli_num_rows($result) == 1){
+			$statement = $db->prepare("SELECT * FROM admin WHERE upmail=? AND password=?");
+			$statement->bind_param("ss", $adminEmail, $adminPassword);
+			$statement->execute();
+			$statement->store_result();
+			$statement->bind_result($admin_id, $upmail, $password);
+			if($statement->num_rows() == 1){
 				// log user in
                 echo "SUCCESS";
 				$_SESSION['adminEmail'] = $adminEmail;
@@ -175,6 +192,34 @@
 			mysqli_query($db, $sql);
 			$_SESSION['success'] = "Thank you for logging session.";
 			header('location: index.php'); // redirect to home
+		}
+	}
+
+    // add subject for admins
+	if(isset($_POST['addsubject'])){
+		$title = mysqli_real_escape_string($db, $_POST['title']);
+		$uppercaseTitle = strtoupper($title);
+		$program = mysqli_real_escape_string($db, $_POST['program']);
+		$checkUniqueness = "SELECT * FROM subject WHERE title = '$title' AND program = '$program' LIMIT 1";
+		$resultUniqueness = mysqli_query($db, $checkUniqueness);
+
+		// make sure all fields are filled
+		if(empty($title)){
+			array_push($errors, "Title is required.");	// add error message to errors array
+		}
+
+		// check if subject/program combination is unique and does not already exist in db
+		if(mysqli_num_rows($resultUniqueness) > 0){
+			array_push($errors, "Subject-Program combination already exists."); // add error message to array
+		}
+
+		// if there are no errors, save subject to database
+		if(count($errors) == 0){
+			$sql = "INSERT INTO subject (title, program)
+					VALUES('$uppercaseTitle', '$program')";
+			mysqli_query($db, $sql);
+			$_SESSION['success'] = "Subject added succesfully.";
+			header('location: admin-index.php'); // redirect to home
 		}
 	}
 

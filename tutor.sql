@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2021 at 01:58 PM
+-- Generation Time: Jan 07, 2022 at 08:30 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.3.31
 
@@ -20,6 +20,25 @@ SET time_zone = "+00:00";
 --
 -- Database: `tutor`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `admin_id` int(11) NOT NULL,
+  `upmail` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`admin_id`, `upmail`, `password`) VALUES
+(1, 'admin@up.edu.ph', '123');
 
 -- --------------------------------------------------------
 
@@ -176,7 +195,9 @@ INSERT INTO `subject` (`subject_id`, `title`, `program`) VALUES
 (7, 'METEOROLOGY 128', 'BS in Biology'),
 (8, 'BIOPHYSICS 10', 'BS in Biology'),
 (9, 'ZOOLOGY 24', 'BS in Biology'),
-(10, 'MOLECULAR BIOLOGY 35', 'BS in Biology');
+(10, 'MOLECULAR BIOLOGY 35', 'BS in Biology'),
+(11, 'TEST SUBJECT', 'BS in Computer Science'),
+(12, 'TEST BIO SUBJECT', 'BS in Computer Science');
 
 -- --------------------------------------------------------
 
@@ -200,7 +221,9 @@ CREATE TABLE `tutee` (
 
 INSERT INTO `tutee` (`tutee_id`, `first_name`, `last_name`, `upmail`, `program`, `year_level`, `password`) VALUES
 (1, 'Carl', 'Mate', 'cpmate@up.edu.ph', 'BS in Computer Science', 3, '202cb962ac59075b964b07152d234b70'),
-(2, 'Random', 'Bio', 'rbio@up.edu.ph', 'BS in Biology', 4, '202cb962ac59075b964b07152d234b70');
+(2, 'Random', 'Bio', 'rbio@up.edu.ph', 'BS in Biology', 4, '202cb962ac59075b964b07152d234b70'),
+(3, 'dude', 'what', 'dudewhat@up.edu.ph', 'BS in Computer Science', 1, '202cb962ac59075b964b07152d234b70'),
+(4, 'Test', 'User', 'testuser@up.edu.ph', 'BS in Computer Science', 1, '202cb962ac59075b964b07152d234b70');
 
 -- --------------------------------------------------------
 
@@ -364,7 +387,9 @@ INSERT INTO `tutorial_session` (`tutor_id`, `tutee_id`, `date`, `start_time`, `e
 (81, 1, '2021-11-25', '18:55:00', '07:25:00', 'MATH 55'),
 (81, 1, '2021-11-25', '18:56:00', '07:26:00', 'MATH 55'),
 (81, 1, '2021-11-25', '19:13:00', '19:44:00', 'MATH 55'),
-(81, 2, '2021-11-25', '20:44:00', '20:45:00', 'EVOLUTION 101');
+(81, 2, '2021-11-25', '20:44:00', '20:45:00', 'EVOLUTION 101'),
+(102, 1, '2022-01-04', '10:37:00', '11:38:00', 'MATH 55'),
+(81, 4, '2022-01-07', '15:22:00', '15:22:00', 'MATH 55');
 
 -- --------------------------------------------------------
 
@@ -725,6 +750,12 @@ INSERT INTO `tutor_teaches` (`tutor_id`, `subject_id`) VALUES
 --
 
 --
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`admin_id`);
+
+--
 -- Indexes for table `available_time`
 --
 ALTER TABLE `available_time`
@@ -774,6 +805,12 @@ ALTER TABLE `tutor_teaches`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `available_time`
 --
 ALTER TABLE `available_time`
@@ -783,13 +820,13 @@ ALTER TABLE `available_time`
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tutee`
 --
 ALTER TABLE `tutee`
-  MODIFY `tutee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `tutee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tutor`
