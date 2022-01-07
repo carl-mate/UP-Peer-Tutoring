@@ -1,4 +1,4 @@
-<?php include("top.html"); include("server.php");
+<?php include("has-session-top.html"); include("server.php");
 
 // if user is not logged in, they cannot access this page
 if(empty($_SESSION['adminEmail'])){
@@ -71,7 +71,7 @@ if(empty($_SESSION['adminEmail'])){
                     <div class="box_topic">
 <div class="content">
       <h1 id="signup">Add Subject</h1>
-      <form action="add-subject.php" method="post">
+      <form action="add-subjects.php" method="post">
         <?php include('errors.php'); ?>
         <div class="text_field">
             <label>Title</label>

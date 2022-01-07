@@ -17,6 +17,12 @@
             <select name="program">
                 <option selected="selected">BS in Computer Science</option>
                 <option>BS in Biology</option>
+                <option>BS in Accountancy</option>
+                <option>BS in Management</option>
+                <option>BA in Communication Arts</option>
+                <option>BA in Psychology</option>
+                <option>BA in Economics</option>
+                <option>BA in Political Science</option>
             </select>
         </div>
         <div class="select_field">
@@ -26,6 +32,7 @@
                 <option>2</option>
                 <option>3</option>
                 <option>4</option>
+                <option>5</option>
             </select>
         </div>
         <div class="text_field">

@@ -1,4 +1,4 @@
-<?php include("top.html"); include("server.php"); ?>
+<?php include("has-session-top.html"); include("server.php"); ?>
 
 <?php
 if(isset($_GET['subject'])){

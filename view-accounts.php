@@ -1,4 +1,4 @@
-<?php include("top.html"); include("server.php");
+<?php include("has-session-top.html"); include("server.php");
 
 // if user is not logged in, they cannot access this page
 if(empty($_SESSION['adminEmail'])){
