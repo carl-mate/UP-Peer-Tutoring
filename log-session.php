@@ -80,7 +80,7 @@ foreach($titleResult as $row){
             <div class="box">
                 <div class="left-side">
                     <div class="box_topic">
-                    <div class="content">
+   <div class="content">
       <h1 id="log">Log Session</h1>
       <form action="log-session.php" method="post">
         <?php include('errors.php'); ?>

@@ -365,9 +365,15 @@ form .text_field{
 form .select_field{
     position: relative;
     width: 100%;
-    color: red;
     margin: 50px 0;
 }
+
+form .checkbox_field{
+    width: 100%;
+    margin: 50px 0;
+    text-align: center;
+}
+
 
 .text_field input{
     width: 100%;
@@ -379,6 +385,7 @@ form .select_field{
     outline: none;
 }
 
+/*
 label{
     position: absolute;
     top: 50%;
@@ -387,9 +394,9 @@ label{
     transform: translateY(-200%); 
     font-size: 18px;
     pointer-events: none;
-    /*margin-top: 20px;*/
-/*    transition: .5s;   */
 }
+*/
+
 
 /*
 .text_field span::before{
@@ -465,7 +472,9 @@ input[type="submit"]{
 }
 
 .match {
-    height: 220px;
+    /*height: 220px;*/
+    height: 100%;
+    width: 105%;
 	margin-bottom: 1em;
     padding-bottom: 1em;
     background-color: white;
@@ -505,9 +514,9 @@ p span {
 
 table {
     border: 1px solid #dad9d4;
-    margin: auto;
+    /*margin: auto;*/
     border-collapse: collapse;
-    width: 100%;
+    min-width: 400px;
 }
 
 td {
@@ -524,4 +533,5 @@ caption {
     margin-top: 20px;
     margin-bottom: 20px;
     text-align: center;
+    width: 100%;
 }

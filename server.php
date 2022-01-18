@@ -6,8 +6,16 @@
 	$upmail = "";
 	$errors = array();
 	// connect to database
-	$db = mysqli_connect('localhost', 'root', '');
-    mysqli_select_db($db, 'tutor');
+    $servername = "localhost";
+    $username = "root";
+    $password = "Mu612216";
+    $dbname = "peer_tutoring";
+
+    $db = new mysqli($servername, $username, $password, $dbname);
+
+    if($db->connect_error){
+        die("Connection failed: " . $db->connect_error);
+    }
 
 	// if register button is clicked
 	if(isset($_POST['signup'])){
@@ -18,7 +26,9 @@
 		$yearlevel = mysqli_real_escape_string($db, $_POST['yearlevel']);
 		$password = mysqli_real_escape_string($db, $_POST['password']);
 		$confirmpassword = mysqli_real_escape_string($db, $_POST['confirmpassword']);
-		$checkUniqueness = "SELECT * FROM tutee WHERE upmail = '$upmail' LIMIT 1";
+        $isTutor = 0; #Student is a tutee upon signing up
+        $isPendingApproval = 0; #This will be set to true if student decides to be a tutor
+		$checkUniqueness = "SELECT * FROM student WHERE upmail = '$upmail' LIMIT 1";
 		$resultUniqueness = mysqli_query($db, $checkUniqueness);
 
 		// make sure all fields are filled
@@ -47,27 +57,16 @@
 			array_push($errors, "Invalid email.");
 		}
 
-		// // if there are no errors, save user to database
-		// if(count($errors) == 0){
-		// 	$password = md5($password);	// encrypt password before storing in database (security)
-		// 	$sql = "INSERT INTO tutee (first_name, last_name, upmail, program, year_level, password)
-		// 			VALUES('$firstname', '$lastname', '$upmail', '$program', '$yearlevel', '$password')";
-		// 	mysqli_query($db, $sql);
-		// 	$_SESSION['upmail'] = $upmail;
-		// 	$_SESSION['success'] = "You are now logged in.";
-		// 	header('location: index.php'); // redirect to home
-		// }
-
 		// if there are no errors, save user to database
 		if(count($errors) == 0){
 			$password = md5($password); // encrypt password before storing in database (security)
-			$statement = $db->prepare("INSERT INTO tutee (first_name, last_name, upmail, program, year_level, password)
-									   VALUES(?, ?, ?, ?, ?, ?)");
-			$statement->bind_param("ssssis", $firstname, $lastname, $upmail, $program, $yearlevel, $password);
+			$statement = $db->prepare("INSERT INTO student (first_name, last_name, upmail, program, year_level, password, isTutor, isPendingApproval)
+									   VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+			$statement->bind_param("ssssisii", $firstname, $lastname, $upmail, $program, $yearlevel, $password, $isTutor, $isPendingApproval);
 			$statement->execute();
 			$_SESSION['upmail'] = $upmail;
 			$_SESSION['success'] = "You are now logged in.";
-			header('location: index.php'); // redirect to home
+			header('location: tutee-index.php'); // redirect to home
 		}
 	}
 
@@ -86,22 +85,46 @@
 
 		if(count($errors) == 0){
 			$password = md5($password);
-			$statement = $db->prepare("SELECT * FROM tutee WHERE upmail=? AND password=?");
+			$statement = $db->prepare("SELECT * FROM student WHERE upmail=? AND password=?");
 			$statement->bind_param("ss", $upmail, $password);
 			$statement->execute();
 			$statement->store_result();
-			$statement->bind_result($tutee_id, $first_name, $last_name, $upmail, $program, $year_level, $password);
+			$statement->bind_result($student_id, $first_name, $last_name, $upmail, $program, $year_level, $password, $isTutor, $isPendingApproval);
 			if($statement->num_rows() == 1){
 				// log user in
                 echo "SUCCESS";
 				$_SESSION['upmail'] = $upmail;
 				$_SESSION['success'] = "You are now logged in.";
-				header('location: index.php');		// redirect to home
+				header('location: tutee-index.php');		// redirect to home
 			} else{
 				array_push($errors, "Incorrect upmail/password combination.");
 			}
 		}
 	}
+
+    // become tutor_upmail
+    if(isset($_POST['pendingrequest'])){
+		$upmail = mysqli_real_escape_string($db, $_SESSION['upmail']);
+        $checkIfPending = "SELECT isPendingApproval FROM student WHERE upmail='$upmail'";
+		$resultPending = mysqli_query($db, $checkIfPending);
+        $isPendingApproval = 0;
+
+        foreach($resultPending as $row){
+            $isPendingApproval = $row['isPendingApproval'];
+        }
+
+        if($isPendingApproval != 0){
+			array_push($errors, "You request is already being reviewed.");	// add error message to errors array
+        }
+
+        if(count($errors) == 0){
+            $updatePendingRequest = "UPDATE student SET isPendingApproval=1 WHERE upmail='$upmail'";
+            mysqli_query($db, $updatePendingRequest);
+            $_SESSION['success'] = "Your request has been forwarded successfully.";
+			header('location: tutee-index.php'); // redirect to home
+        }     
+    }
+
 
 	// admin login
 	if(isset($_POST['admin-login'])){
@@ -117,7 +140,7 @@
 		}
 
 		if(count($errors) == 0){
-			$statement = $db->prepare("SELECT * FROM admin WHERE upmail=? AND password=?");
+			$statement = $db->prepare("SELECT * FROM admin WHERE username=? AND password=?");
 			$statement->bind_param("ss", $adminEmail, $adminPassword);
 			$statement->execute();
 			$statement->store_result();
@@ -134,7 +157,7 @@
 		}
 	}
 
-    // log session
+    // log session to be edited
 	if(isset($_POST['logsession'])){
 		$tutor_upmail = mysqli_real_escape_string($db, $_POST['upmail']);
 		$date = mysqli_real_escape_string($db, $_POST['date']);
@@ -195,6 +218,116 @@
 		}
 	}
 
+    //book available_time for tutee
+    if(isset($_GET['book'])){
+        $array = explode(",", $_GET['book']);
+        $tutorID = $array[0];
+        $tuteeID = $array[1];
+        $date = $array[2];
+        $startTime = $array[3];
+        $endTime = $array[4];
+        $subject = $array[5];
+        $availableTimeID = $array[6];
+
+        //update available_time
+        $bookQuery = "UPDATE available_time SET isBooked='1', subject='$subject', student_id='$tuteeID' WHERE available_time_id='$availableTimeID'";
+        mysqli_query($db, $bookQuery);
+
+        //insert booked schedule into tutorial_session
+        $tutSessionQuery = "INSERT INTO tutorial_session (tutor_id, tutee_id, date, start_time, end_time, subject, status)
+                            VALUES('$tutorID', '$tuteeID', '$date', '$startTime', '$endTime', '$subject', 'ONGOING')";
+        mysqli_query($db, $tutSessionQuery);
+
+		$_SESSION['success'] = "Schedule has been booked successfully.";
+        header('location: tutee-index.php');
+    }
+
+    // add subject for tutor
+	if(isset($_POST['tutoraddsubject'])){
+		$title = mysqli_real_escape_string($db, $_POST['title']);
+        $tutor_upmail = $_SESSION['upmail'];
+
+
+        //Get the program and student_id of the tutor
+        $tutorQuery = "SELECT student_id, program FROM student WHERE upmail='$tutor_upmail'";
+        $tutorResult = mysqli_query($db, $tutorQuery);
+        $program = "";
+        $tutorID = 0;
+        foreach($tutorResult as $row){
+            $program = $row['program'];
+            $tutorID = $row['student_id'];
+        }
+
+        //Get the subject_id of the given title
+        $subjectIDQuery = "SELECT subject_id FROM subject WHERE title='$title' AND program='$program'";
+        $subjectIDResult = mysqli_query($db, $subjectIDQuery);
+        $subjectID = 0;
+        foreach($subjectIDResult as $row){
+            $subjectID = $row['subject_id'];
+        }
+
+		// if there are no errors, save subject to database
+		if(count($errors) == 0){
+			$sql = "INSERT INTO tutor_teaches (tutor_id, subject_id)
+					VALUES('$tutorID', '$subjectID')";
+			mysqli_query($db, $sql);
+			$_SESSION['success'] = "Subject added succesfully.";
+			header('location: tutor-index.php'); // redirect to home
+		}
+	}
+
+    // update booking status for tutor
+    if(isset($_POST['confirmstatus'])){
+        $confirmStatus = mysqli_real_escape_string($db, $_POST['status']);
+        strtoupper($confirmStatus);
+       //update the status in tutorial_session 
+        $tutSessionUpdateQuery = "UPDATE tutorial_session SET status='$confirmStatus'";
+        mysqli_query($db, $tutSessionUpdateQuery);
+        $_SESSION['success'] = "Status has been updated successfully.";
+        header('location: tutor-index.php');
+    }
+
+    // add subject for tutor
+	if(isset($_POST['tutoraddavailabletime'])){
+		$date = mysqli_real_escape_string($db, $_POST['date']);
+		$start_time = mysqli_real_escape_string($db, $_POST['starttime']);
+		$end_time = mysqli_real_escape_string($db, $_POST['endtime']);
+        $tutor_upmail = $_SESSION['upmail'];
+
+        //Get the student_id of the tutor
+        $tutorQuery = "SELECT student_id FROM student WHERE upmail='$tutor_upmail'";
+        $tutorResult = mysqli_query($db, $tutorQuery);
+        $tutorID = 0;
+        foreach($tutorResult as $row){
+            $tutorID = $row['student_id'];
+        }
+
+        if(empty($date)){
+			array_push($errors, "Date is required.");	// add error message to errors array
+		}
+        if(empty($start_time)){
+			array_push($errors, "Start time is required.");	// add error message to errors array
+		}
+        if(empty($end_time)){
+			array_push($errors, "End time is required.");	// add error message to errors array
+		}
+
+      	// if there are no errors, save to database
+		if(count($errors) == 0){
+             // insert into available_time
+            $insertIntoAvailableTime = "INSERT INTO available_time (date, start_time, end_time, isBooked, subject, student_id) 
+                                        VALUES('$date', '$start_time', '$end_time', '0', '', '$tutorID')";
+			mysqli_query($db, $insertIntoAvailableTime);
+            $available_time_id = mysqli_insert_id($db);
+            // insert into tutor_available_time
+            $insertIntoTutorAvailableTime = "INSERT INTO tutor_available_time (available_time_id, tutor_id) 
+                                             VALUES('$available_time_id', '$tutorID')";
+			mysqli_query($db, $insertIntoTutorAvailableTime);
+			$_SESSION['success'] = "Available time added succesfully.";
+			header('location: tutor-index.php'); // redirect to home
+		}
+	}
+
     // add subject for admins
 	if(isset($_POST['addsubject'])){
 		$title = mysqli_real_escape_string($db, $_POST['title']);
@@ -222,6 +355,32 @@
 			header('location: admin-index.php'); // redirect to home
 		}
 	}
+
+    if(isset($_POST['pendingapproval'])){
+        $approval = $_POST['acceptreject'];
+        $studentID = $_POST['pendingapproval'];
+        var_dump($approval);
+        var_dump($studentID);
+        if($approval == 'Reject'){
+            $approval = 0;
+            echo "REJECTED";
+        } else if($approval == 'Accept'){
+            $approval = 1;
+            echo "ACCEPTED";
+        }
+
+        // Update isPendingApproval and isTutor attribute of student table
+        $updateStudentQuery = "UPDATE student SET isPendingApproval=0, isTutor='$approval' WHERE student_id='$studentID'";
+        mysqli_query($db, $updateStudentQuery);
+
+        if($approval){
+            $_SESSION['success'] = "Tutee request to become a tutor has been accepted.";
+	        header('location: admin-index.php'); // redirect to home
+        } else{
+            $_SESSION['success'] = "Tutee request to become a tutor has been rejected.";
+	        header('location: admin-index.php'); // redirect to home
+        }
+    }
 
 	// logout
 	if(isset($_GET['logout'])){

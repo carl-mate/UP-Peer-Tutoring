@@ -4,52 +4,9 @@
 if(empty($_SESSION['adminEmail'])){
     header('location: admin-login.php');
 }
-?>
 
-<div class="sidebar">
-    <div class="logo-details">
-        <img src="images/tutor.png" alt="banner logo" />
-        <span class="logo_name">UP Peer Tutoring</span>
-    </div>
-    <ul class="nav-links">
-        <li>
-            <a href="admin-index.php">
-                <i class='bx bx-grid-alt' ></i>
-                <span class="link_name">Dashboard</span>
-            </a>
-        </li>
-        <li>
-            <a href="view-sessions.php">
-                <i class='bx bx-notepad' ></i>
-                <span class="link_name">View Sessions</span>
-            </a>
-        </li>
-        <li>
-            <a href="view-accounts.php">
-                <i class='bx bx-group' ></i>
-                <span class="link_name">View Accounts</span>
-            </a>
-        </li>
-        <li>
-            <a href="view-subjects.php">
-                <i class='bx bx-layer' ></i>
-                <span class="link_name">View Subjects</span>
-            </a>
-        </li>
-        <li>
-            <a href="add-subjects.php">
-                <i class='bx bx-layer-plus' ></i>
-                <span class="link_name">Add Subjects</span>
-            </a>
-        </li>
-        <li>
-            <a href="admin-index.php?admin-logout='1'">
-                <i class='bx bx-log-out' ></i>
-                <span class="link_name">Logout</span>
-            </a>
-        </li>
-    </ul>
-</div>
+include("admin-sidebar.html");
+?>
 
 <section class="home-section">
     <nav>
@@ -71,7 +28,7 @@ if(empty($_SESSION['adminEmail'])){
                     <div class="box_topic">
 <div class="content">
       <h1 id="signup">Add Subject</h1>
-      <form action="add-subjects.php" method="post">
+      <form action="admin-add-subjects.php" method="post">
         <?php include('errors.php'); ?>
         <div class="text_field">
             <label>Title</label>

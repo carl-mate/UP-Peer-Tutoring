@@ -1,11 +1,23 @@
-<?php include("has-session-top.html"); include("server.php");
-
-// if user is not logged in, they cannot access this page
-if(empty($_SESSION['adminEmail'])){
-    header('location: admin-login.php');
+<?php include("has-session-top.html"); include("server.php"); // if user is not logged in, they cannot access this page
+if(empty($_SESSION['upmail'])){
+    header('location: login.php');
 }
 
-include("admin-sidebar.html");
+$upmail = $_SESSION['upmail'];
+// check if user is also a tutor
+$isTutor = 0;
+$query = "SELECT isTutor FROM student WHERE upmail='$upmail'";
+$result = mysqli_query($db, $query);
+
+foreach($result as $row){
+    $isTutor = $row['isTutor'];
+}
+
+if(!$isTutor){ // If user is not a tutor, they cannot access this page
+    header('location: tutee-index.php');
+}
+
+include("tutor-sidebar.html");
 ?>
 
 <section class="home-section">
@@ -16,7 +28,7 @@ include("admin-sidebar.html");
         </div>
         <div class="profile-details">
             <img src="images/user.png" alt="">
-            <span class="user">Admin</span>
+            <span class="user"><?=$_SESSION['upmail']?></span>
            <!--<i class='bx bx-chevron-down' ></i>--> 
         </div>
     </nav>
@@ -36,7 +48,7 @@ unset($_SESSION['success']);
                     </h4>
                 </div>
             <?php endif ?>
-                        <h3>Welcome, Admin!</h3>
+                        <h3>Welcome, <?=$_SESSION['upmail']?></h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                     </div>
                 </div>

@@ -26,18 +26,26 @@ include("admin-sidebar.html");
             <div class="box">
                 <div class="left-side">
                     <div class="box_topic">
-            <?php if(isset($_SESSION['success'])): ?>
-                <div class="error success">
-                    <h4>
-<?php 
-echo $_SESSION['success'];
-unset($_SESSION['success']);
+<?php
+//Fetch all subjects (subjects are a weak entity which depends on available tutors)
+$query = "SELECT * FROM subject";
+$result = mysqli_query($db, $query);
+
+$i = 1;
 ?>
-                    </h4>
-                </div>
-            <?php endif ?>
-                        <h3>Welcome, Admin!</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+ <!--Table here --->
+<table>
+<caption>Viewing all subjects</caption>
+<tr><th>#</th><th>Subject Title</th><th>Program</th></tr>
+<?php 
+while($row = mysqli_fetch_array($result)){
+?>
+    <tr><td><?=$i?></td><td><?=$row['title']?></td><td><?=$row['program']?></td></tr>
+<?php 
+    $i++; 
+} 
+?>
+</table>                    
                     </div>
                 </div>
             </div>
@@ -45,7 +53,7 @@ unset($_SESSION['success']);
     </div>
 
 </section>
-
 <script src="script.js"></script>
+
 </body>
 </html>

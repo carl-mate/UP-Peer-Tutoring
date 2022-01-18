@@ -4,57 +4,18 @@ if(empty($_SESSION['upmail'])){
     header('location: login.php');
 }
 
-$query = "SELECT first_name, last_name, program FROM tutee WHERE upmail='" . $_SESSION['upmail'] . "'";
-$result = mysqli_query($db, $query);
+include("tutee-sidebar.html");
+
+$studentQuery = "SELECT first_name, last_name, program FROM student WHERE upmail='$upmail'";
+$studentResult = mysqli_query($db, $studentQuery);
 
 $first_name = "";
 $last_name = "";
-foreach($result as $row){
+foreach($studentResult as $row){
     $first_name = $row['first_name'];
     $last_name = $row['last_name'];
 }
-
 ?>
-
-
-<div class="sidebar">
-    <div class="logo-details">
-        <img src="images/tutor.png" alt="banner logo" />
-        <span class="logo_name">UP Peer Tutoring</span>
-    </div>
-    <ul class="nav-links">
-        <li>
-            <a href="index.php">
-                <i class='bx bx-grid-alt' ></i>
-                <span class="link_name">Dashboard</span>
-            </a>
-        </li>
-        <li>
-            <a href="find-tutor.php">
-                <i class='bx bx-user-circle' ></i>
-                <span class="link_name">Find Tutor</span>
-            </a>
-        </li>
-        <li>
-            <a href="log-session.php">
-                <i class='bx bx-pencil' ></i>
-                <span class="link_name">Log Session</span>
-            </a>
-        </li>
-        <li>
-            <a href="my-sessions.php">
-                <i class='bx bx-list-ul' ></i>
-                <span class="link_name">My Sessions</span>
-            </a>
-        </li>
-        <li>
-            <a href="index.php?logout='1'">
-                <i class='bx bx-log-out' ></i>
-                <span class="link_name">Log out</span>
-            </a>
-        </li>
-    </ul>
-</div>
 
 <section class="home-section">
     <nav>
@@ -79,7 +40,7 @@ foreach($result as $row){
 <?php
 
 $program = "";
-foreach($result as $row){
+foreach($studentResult as $row){
     $program = $row['program'];
 }
 
@@ -92,7 +53,7 @@ foreach($titleResult as $row){
 }
 ?>
 
-<form action="list-tutor.php" method="get">
+<form action="tutee-list-tutor.php" method="get">
     <div class="select_field">
     <select name="subject">
     <option selected="selected"><?=$titleArray[0]?></option>

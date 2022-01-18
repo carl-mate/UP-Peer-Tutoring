@@ -4,12 +4,12 @@
       <form action="admin-login.php" method="post">
     	<?php include('errors.php'); ?>
         <div class="text_field"> 
-            <input type="email" name="adminEmail" required />
-            <label>UP Mail</label>
+            <label>Username</label>
+            <input type="text" name="adminEmail" required />
         </div>
         <div class="text_field">
-            <input type="password" name="adminPassword" placeholder="" />
             <label>Password</label>
+            <input type="password" name="adminPassword" placeholder="" />
         </div>
         <input type="submit" name="admin-login" />
         <div class="signup_link">
