@@ -158,67 +158,6 @@
 		}
 	}
 
-    // log session to be edited
-	if(isset($_POST['logsession'])){
-		$tutor_upmail = mysqli_real_escape_string($db, $_POST['upmail']);
-		$date = mysqli_real_escape_string($db, $_POST['date']);
-		$start_time = mysqli_real_escape_string($db, $_POST['starttime']);
-		$end_time = mysqli_real_escape_string($db, $_POST['endtime']);
-		$subject = mysqli_real_escape_string($db, $_POST['subject']);
-
-		// make sure all fields are filled
-		if(empty($tutor_upmail)){
-			array_push($errors, "Tutor's UP Mail is required.");	// add error message to errors array
-        } else{
-            //Check if tutor_upmail exists
-            $checkIfUPMailExists = "SELECT upmail FROM tutor WHERE upmail='$tutor_upmail'";
-            $checkIfUPMailExistsResult = mysqli_query($db, $checkIfUPMailExists);
-
-            if(mysqli_num_rows($checkIfUPMailExistsResult) == 0){
-			    array_push($errors, "UP Mail does not exist.");
-		    }
-        }
-		if(empty($date)){
-			array_push($errors, "Date is required.");	// add error message to errors array
-		}
-        if(empty($start_time)){
-			array_push($errors, "Start time is required.");	// add error message to errors array
-		}
-        if(empty($end_time)){
-			array_push($errors, "End time is required.");	// add error message to errors array
-		}
-        if(empty($subject)){
-			array_push($errors, "Subject is required.");	// add error message to errors array
-		}
-        	    
-
-        //Get the tutor_id of tutor_upmail
-        $tutorIDQuery = "SELECT tutor_id FROM tutor WHERE upmail='" . $tutor_upmail . "'";
-        $tutorIDResult = mysqli_query($db, $tutorIDQuery);
-
-        $tutorID = 0;
-        foreach($tutorIDResult as $row){
-            $tutorID = $row['tutor_id'];
-        }
-
-        //Get the tutee_id of $_SESSION['upmail']
-        $tuteeIDQuery = "SELECT tutee_id FROM tutee WHERE upmail='" . $_SESSION['upmail'] . "'";
-        $tuteeIDResult = mysqli_query($db, $tuteeIDQuery);
-
-        $tuteeID = 0;
-        foreach($tuteeIDResult as $row){
-            $tuteeID = $row['tutee_id'];
-        }
-
-	    if(count($errors) == 0){
-			$sql = "INSERT INTO tutorial_session (tutor_id, tutee_id, date, start_time, end_time, subject)
-					VALUES('$tutorID', '$tuteeID', '$date', '$start_time', '$end_time', '$subject')";
-			mysqli_query($db, $sql);
-			$_SESSION['success'] = "Thank you for logging session.";
-			header('location: index.php'); // redirect to home
-		}
-	}
-
     //book available_time for tutee
     if(isset($_GET['book'])){
         $array = explode(",", $_GET['book']);
