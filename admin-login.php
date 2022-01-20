@@ -11,7 +11,7 @@
             <label>Password</label>
             <input type="password" name="adminPassword" placeholder="" />
         </div>
-        <input type="submit" name="admin-login" />
+        <input type="submit" value="Login" name="admin-login" />
         <div class="signup_link">
             <p>Not an admin? <a href="login.php">Log In Here</a></p>
         </div>

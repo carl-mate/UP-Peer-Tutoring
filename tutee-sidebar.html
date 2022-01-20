@@ -9,9 +9,6 @@ foreach($result as $row){
     $isTutor = $row['isTutor'];
 }
 
-if(!$isTutor){
-    header('location: login.php');
-}
 ?>
 
 <div class="sidebar">
@@ -55,7 +52,7 @@ if(!$isTutor){
         </li>
 <?php endif ?>
         <li>
-            <a href="index.php?logout='1'">
+            <a href="tutee-index.php?logout='1'">
                 <i class='bx bx-log-out' ></i>
                 <span class="link_name">Log out</span>
             </a>

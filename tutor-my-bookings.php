@@ -43,7 +43,7 @@ include("tutor-sidebar.html");
 $query = "SELECT at.date, at.start_time, at.end_time, at.subject, at.student_id  
         FROM available_time at
         JOIN tutor_available_time tat
-        ON at.available_time_id=tat.available_time_id
+        ON at.available_time_id=tat.available_time_id AND at.isBooked=1
         JOIN student s 
         ON s.student_id=tat.tutor_id
         WHERE s.upmail='$upmail'";
@@ -71,15 +71,36 @@ foreach($result as $bookingRow){
         $studentName = $row['first_name'] . " " . $row['last_name'];;
         $studentUPMail = $row['upmail'];
     }
+
+    //Get the student_id of tutor
+    $tutorIDQuery = "SELECT student_id FROM student WHERE upmail='$upmail'";
+    $tutorIDResult = mysqli_query($db, $tutorIDQuery);
+    $tutorID = 0;
+    foreach($tutorIDResult as $row){
+        $tutorID = $row['student_id'];
+    }
 ?>
     <tr><td><?=$i?></td><td><?=$studentName?></td><td><a href="gmail.com"><?=$studentUPMail?></a></td><td><?=$date?></td><td><?=$start_time?></td><td><?=$end_time?></td><td><?=$subject?></td>
     <td>
-    <form action="tutor-my-bookings.php" method="post">
+    <form action="tutor-my-bookings.php" method="get">
+<?php
+    $statusQuery = "SELECT status FROM tutorial_session WHERE tutor_id=$tutorID AND tutee_id=$student_id AND date='$date' AND start_time='$start_time' AND end_time='$end_time' AND subject='$subject'";
+    $statusResult = mysqli_query($db, $statusQuery);
+    $status = "";
+    foreach($statusResult as $row){
+        $status = $row['status'];
+    }
+
+    $status2 = "COMPLETED";
+    if($status == "COMPLETED"){
+        $status2 = "ONGOING";
+    }
+?>
         <select name="status">
-            <option>Ongoing</option>
-            <option>Completed</option>
+        <option selected="selected"><?=$status?></option>
+        <option><?=$status2?></option>
         </select>
-        <button type="submit" value="confirm" name="confirmstatus">Confirm</button>
+        <button type="submit" value="<?=$tutorID . "," . $student_id . "," . $date . "," . $start_time . "," . $end_time . "," . $subject?>" name="confirmstatus">Confirm</button>
     </form>
     </td>
     </tr>

@@ -37,7 +37,11 @@ unset($_SESSION['success']);
                 </div>
             <?php endif ?>
                         <h3>Welcome, Admin!</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p><strong>Pending Requests</strong>, display all pending requests from students who want to become a tutor.</p>
+                        <p><strong>View Sessions</strong>, list down all the the tutorial sessions between the tutors and tutees.</p>
+                        <p><strong>View Accounts</strong>, list down all the registered accounts.</p>
+                        <p><strong>View Subjects</strong>, view all the available subjects that a tutor can teach.</p>
+                        <p><strong>Add Subjects</strong>, add a new subject for a specific program that a tutor can teach.</p>
                     </div>
                 </div>
             </div>

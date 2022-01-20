@@ -49,7 +49,6 @@ foreach($tuteeResult as $row){
                     <div class="box_topic">
 <p id="result">Available tutors for <strong><?=$subject?></strong>.</p><br /><br />
 <?php
-$i = 1;
 foreach($tutorResult as $row){
     $tutorID = $row['student_id'];
     $tutorUPMail = $row['upmail'];
@@ -94,14 +93,14 @@ foreach($tutorResult as $row){
 ?>
     <h4>Fully booked!</h4>
 <?php
-    }
-}?>
+    } ?>
                 </ul>
             <li>
                 <a href=<?="https://mail.google.com/mail/?view=cm&fs=1&to=" . $row['upmail'] . "&su=UP_Tacloban_Peer_Tutoring_Program&body=Hello!"?>>Contact</a>
             </li>
         </ul>
 </div>
+<?php } ?>
                     </div>
                 </div>
             </div>

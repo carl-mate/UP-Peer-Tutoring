@@ -34,8 +34,10 @@ unset($_SESSION['success']);
                     </h4>
                 </div>
             <?php endif ?>
-                        <h3>Welcome, <?=$_SESSION['upmail']?></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <h3>Welcome, <?=$_SESSION['upmail']?></h3><br />
+                        <p><strong>Find Tutor</strong>, this action will allow you to find tutors who can teach the subjects that you need help with. Book a schedule with a tutor now!</p>
+                        <p><strong>My Sessions</strong>, list down all the previous tutorial sessions.</p>
+                        <p><strong>Become a Tutor</strong>, if you aren't a tutor yet, then grab the opportunity to share your knowledge with your peers!</p>
                     </div>
                 </div>
             </div>

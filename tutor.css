@@ -514,12 +514,12 @@ p span {
 
 table {
     border: 1px solid #dad9d4;
-    /*margin: auto;*/
+    margin: auto;
     border-collapse: collapse;
     min-width: 400px;
 }
 
-td {
+th, td {
     text-align: center;
     padding: 5px;
 }

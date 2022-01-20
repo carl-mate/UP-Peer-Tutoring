@@ -8,7 +8,7 @@
 	// connect to database
     $servername = "localhost";
     $username = "root";
-    $password = "Mu612216";
+    $password = "";
     $dbname = "peer_tutoring";
 
     $db = new mysqli($servername, $username, $password, $dbname);
@@ -19,6 +19,7 @@
 
 	// if register button is clicked
 	if(isset($_POST['signup'])){
+
 		$firstname = mysqli_real_escape_string($db, $_POST['firstname']);
 		$lastname = mysqli_real_escape_string($db, $_POST['lastname']);
 		$upmail = mysqli_real_escape_string($db, $_POST['upmail']);
@@ -266,33 +267,49 @@
             $subjectID = $row['subject_id'];
         }
 
+        $checkUniqueness = "SELECT * FROM tutor_teaches WHERE tutor_id = '$tutorID' AND subject_id = '$subjectID' LIMIT 1";
+		$resultUniqueness = mysqli_query($db, $checkUniqueness);
+
+		if(mysqli_num_rows($resultUniqueness) > 0){
+			array_push($errors, "Subject has already been added.");
+		}
+
 		// if there are no errors, save subject to database
 		if(count($errors) == 0){
 			$sql = "INSERT INTO tutor_teaches (tutor_id, subject_id)
 					VALUES('$tutorID', '$subjectID')";
 			mysqli_query($db, $sql);
 			$_SESSION['success'] = "Subject added succesfully.";
-			header('location: tutor-index.php'); // redirect to home
+			header('location: tutor-add-a-subject.php'); // redirect to home
 		}
 	}
 
     // update booking status for tutor
-    if(isset($_POST['confirmstatus'])){
-        $confirmStatus = mysqli_real_escape_string($db, $_POST['status']);
-        strtoupper($confirmStatus);
+    if(isset($_GET['confirmstatus'])){
+        $confirmStatus = mysqli_real_escape_string($db, $_GET['status']);
+        $array = explode(",", $_GET['confirmstatus']);
+        $tutorID = $array[0];
+        $tuteeID = $array[1];
+        $date = $array[2];
+        $startTime = $array[3];
+        $endTime = $array[4];
+        $subject = $array[5];
+
        //update the status in tutorial_session 
-        $tutSessionUpdateQuery = "UPDATE tutorial_session SET status='$confirmStatus'";
+        $tutSessionUpdateQuery = "UPDATE tutorial_session SET status='$confirmStatus' WHERE tutor_id=$tutorID AND tutee_id=$tuteeID AND date='$date' AND start_time='$startTime' AND end_time='$endTime' AND subject='$subject'";
         mysqli_query($db, $tutSessionUpdateQuery);
         $_SESSION['success'] = "Status has been updated successfully.";
         header('location: tutor-index.php');
     }
 
-    // add subject for tutor
+    // add available time for tutor
 	if(isset($_POST['tutoraddavailabletime'])){
 		$date = mysqli_real_escape_string($db, $_POST['date']);
 		$start_time = mysqli_real_escape_string($db, $_POST['starttime']);
 		$end_time = mysqli_real_escape_string($db, $_POST['endtime']);
         $tutor_upmail = $_SESSION['upmail'];
+        $checkUniqueness = "SELECT * FROM available_time WHERE date = '$date' AND start_time = '$start_time' AND end_time = '$end_time' LIMIT 1";
+		$resultUniqueness = mysqli_query($db, $checkUniqueness);
 
         //Get the student_id of the tutor
         $tutorQuery = "SELECT student_id FROM student WHERE upmail='$tutor_upmail'";
@@ -310,6 +327,9 @@
 		}
         if(empty($end_time)){
 			array_push($errors, "End time is required.");	// add error message to errors array
+		}
+		if(mysqli_num_rows($resultUniqueness) > 0){
+			array_push($errors, "Available Time has already been added.");
 		}
 
       	// if there are no errors, save to database
