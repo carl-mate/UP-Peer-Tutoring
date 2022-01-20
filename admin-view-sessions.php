@@ -61,7 +61,7 @@ foreach($result as $sessionRow){
     $tuteeNameResult = mysqli_query($db, $tuteeNameQuery);
     $tuteeName= "";
     foreach($tuteeNameResult as $row){
-        $tuteeName = $row['first_name'] . " " . $row['last_name'];;
+        $tuteeName = $row['first_name'] . " " . $row['last_name'];
     }
 ?>
     <tr><td><?=$i?></td><td><?=$tutorID?></td><td><?=$tutorName?></td><td><?=$tuteeID?></td><td><?=$tuteeName?></td><td><?=$date?></td><td><?=$startTime?></td><td><?=$endTime?></td><td><?=$subject?></td><td><?=$status?></td></tr>

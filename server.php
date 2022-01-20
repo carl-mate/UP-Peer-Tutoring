@@ -19,6 +19,7 @@
 
 	// if register button is clicked
 	if(isset($_POST['signup'])){
+
 		$firstname = mysqli_real_escape_string($db, $_POST['firstname']);
 		$lastname = mysqli_real_escape_string($db, $_POST['lastname']);
 		$upmail = mysqli_real_escape_string($db, $_POST['upmail']);
@@ -272,16 +273,23 @@
 					VALUES('$tutorID', '$subjectID')";
 			mysqli_query($db, $sql);
 			$_SESSION['success'] = "Subject added succesfully.";
-			header('location: tutor-index.php'); // redirect to home
+			header('location: tutor-add-a-subject.php'); // redirect to home
 		}
 	}
 
     // update booking status for tutor
-    if(isset($_POST['confirmstatus'])){
-        $confirmStatus = mysqli_real_escape_string($db, $_POST['status']);
-        strtoupper($confirmStatus);
+    if(isset($_GET['confirmstatus'])){
+        $confirmStatus = mysqli_real_escape_string($db, $_GET['status']);
+        $array = explode(",", $_GET['confirmstatus']);
+        $tutorID = $array[0];
+        $tuteeID = $array[1];
+        $date = $array[2];
+        $startTime = $array[3];
+        $endTime = $array[4];
+        $subject = $array[5];
+
        //update the status in tutorial_session 
-        $tutSessionUpdateQuery = "UPDATE tutorial_session SET status='$confirmStatus'";
+        $tutSessionUpdateQuery = "UPDATE tutorial_session SET status='$confirmStatus' WHERE tutor_id=$tutorID AND tutee_id=$tuteeID AND date='$date' AND start_time='$startTime' AND end_time='$endTime' AND subject='$subject'";
         mysqli_query($db, $tutSessionUpdateQuery);
         $_SESSION['success'] = "Status has been updated successfully.";
         header('location: tutor-index.php');
