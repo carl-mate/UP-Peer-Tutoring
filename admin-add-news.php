@@ -7,7 +7,6 @@ if(empty($_SESSION['adminEmail'])){
 
 include("admin-sidebar.html");
 ?>
-
 <section class="home-section">
     <nav>
         <div class="sidebar-button">
@@ -25,27 +24,26 @@ include("admin-sidebar.html");
         <div class="big-boxes">
             <div class="box">
 <div class="content">
-      <h1 id="signup">Add Subject</h1>
+      <h1 id="signup">Add News</h1>
       <form action="admin-add-subjects.php" method="post">
         <?php include('errors.php'); ?>
         <div class="text_field">
             <label>Title</label>
             <input type="text" name="title" required />
         </div>
-        <div class="select_field">
-            <label>Program</label>
-            <select name="program">
-            <option selected="selected">BS in Computer Science</option>
-            <option>BS in Biology</option>
-            <option>BS in Accountancy</option>
-            <option>BS in Management</option>
-            <option>BA in Communication Arts</option>
-            <option>BA in Psychology</option>
-            <option>BA in Economics</option>
-            <option>BA in Political Science</option>
-        </select>
+        <div class="text_area">
+            <label>Body</label>
+            <textarea type="text" name="body" required></textarea>
         </div>
-        <input type="submit" value="Add" name="addsubject" />
+        <div class="select_field">
+            <label>Visible To</label>
+            <select name="visibility">
+            <option selected="selected">All</option>
+            <option>Tutors</option>
+            <option>Tutees</option>
+            </select>
+        </div>
+        <input type="submit" value="Add" name="addnews" />
       </form>
 </div>
             </div>

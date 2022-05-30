@@ -197,17 +197,20 @@ nav .profile-details i{
 }
 
 .home-section .home-content {
+    //position: relative;
     padding-top: 100px;
 }
 
 .home-content .overview-boxes{
     display: flex;
     width: 100%;
+    justify-content: space-between;
     padding: 0 30px;
     flex-wrap: wrap;
 }
 .home-content .overview-boxes .box{
-    width: 100%;
+    /*width: 100%;*/
+    width: calc(100% / 2 - 15px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -215,12 +218,60 @@ nav .profile-details i{
     background: #fff;
     /*background: yellow;*/
     border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 10px rgb(0, 0, 0, 0.1);
 }
 
 .home-content .overview-boxes .box_topic{
     font-size: 20px;
     font-weight: 500;
 }
+
+.home-content .overview-boxes .number {
+    font-size: 35px;
+    font-weight: 900;
+}
+
+.overview-boxes .box .icon {
+    font-size: 32px;
+    font-weight: 500;
+    height: 50px;
+    width: 50px;
+    margin-left: 5px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 12px;
+    background: #cce5ff;
+    color: #66b0ff;
+}
+
+.home-section .big-boxes{
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-section .big-boxes .body{
+    display: flex;
+    align-items: center;
+}
+
+.home-section .big-boxes .box .title{
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.home-section .big-boxes .box {
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    box-sizing: 0 5px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    box-shadow: 0 5px 10px rgb(0, 0, 0, 0.1);
+}
+
+
 
 @media (max-width: 1216px){
     .sidebar{
@@ -249,7 +300,8 @@ nav .profile-details i{
 
 @media (max-width: 1018px){
     .home-content .overview-boxes .box{
-        width: 100%;
+        /*width: 100%;*/
+        width: calc(100% / 2 - 15px);
         margin-bottom: 15px;
     }
 }
@@ -362,6 +414,11 @@ form .text_field{
     margin: 50px 0;
 }
 
+form .text_area{
+    position: relative;
+    margin: 50px 0;
+}
+
 form .select_field{
     position: relative;
     width: 100%;
@@ -383,6 +440,18 @@ form .checkbox_field{
     border: none;
     background: transparent;
     outline: none;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
 }
 
 /*
@@ -474,7 +543,7 @@ input[type="submit"]{
 .match {
     /*height: 220px;*/
     height: 100%;
-    width: 105%;
+    width: 100%;
 	margin-bottom: 1em;
     padding-bottom: 1em;
     background-color: white;
@@ -535,3 +604,4 @@ caption {
     text-align: center;
     width: 100%;
 }
+

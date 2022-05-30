@@ -32,10 +32,8 @@ foreach($tuteeResult as $row){
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
 <?php
 //Find all sessions of the tutee  
 $sessionQuery = "SELECT * FROM tutorial_session WHERE tutee_id=$tuteeID";
@@ -70,8 +68,6 @@ foreach($sessionResult as $sessionResultRow){
     }
 } ?>    
 </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -22,10 +22,9 @@ include("tutor-sidebar.html");
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
+
 <?php
 $schedQuery = "SELECT date, start_time, end_time
         FROM available_time at
@@ -53,8 +52,6 @@ foreach($schedResult as $row){
     $i++;
 } ?>
     </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

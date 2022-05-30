@@ -43,7 +43,7 @@ foreach($tuteeResult as $row){
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
                 <div class="left-side">
                     <div class="box_topic">

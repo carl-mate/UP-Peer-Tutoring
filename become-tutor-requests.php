@@ -22,10 +22,8 @@ include("admin-sidebar.html");
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
 <?php
 //Fetch all students with pending approval
 $studentQuery = "SELECT * FROM student WHERE isPendingApproval=1";
@@ -59,8 +57,7 @@ while($row = mysqli_fetch_array($studentResult)){
 }
 $i = 1;
 ?>
-                    </div>
-                </div>
+                    
             </div>
         </div>
     </div>

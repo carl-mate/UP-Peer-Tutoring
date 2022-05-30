@@ -22,10 +22,8 @@ include("admin-sidebar.html");
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
 <?php
 //Fetch all tutorial_session
 $query = "SELECT * FROM tutorial_session";
@@ -69,8 +67,6 @@ foreach($result as $sessionRow){
     $i++;
 } ?>
     </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

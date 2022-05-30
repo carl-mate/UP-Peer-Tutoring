@@ -22,10 +22,8 @@ include("admin-sidebar.html");
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
 <?php
 //Fetch all subjects (subjects are a weak entity which depends on available tutors)
 $query = "SELECT * FROM subject";
@@ -46,8 +44,6 @@ while($row = mysqli_fetch_array($result)){
 } 
 ?>
 </table>                    
-                    </div>
-                </div>
             </div>
         </div>
     </div>

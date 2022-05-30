@@ -5,7 +5,7 @@
     	<?php include('errors.php'); ?>
 
         <div class="text_field">
-            <label>UP Mail</label>
+            <label>UPVTC E-Mail</label>
             <input type="email" name="upmail" required />
         </div>
         <div class="text_field">

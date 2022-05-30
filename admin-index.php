@@ -23,10 +23,8 @@ include("admin-sidebar.html");
 
     <div class="home-content">
         <div class="overview-boxes">
-            <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
-            <?php if(isset($_SESSION['success'])): ?>
+
+<?php if(isset($_SESSION['success'])): ?>
                 <div class="error success">
                     <h4>
 <?php 
@@ -36,15 +34,91 @@ unset($_SESSION['success']);
                     </h4>
                 </div>
             <?php endif ?>
-                        <h3>Welcome, Admin!</h3>
-                        <p><strong>Pending Requests</strong>, display all pending requests from students who want to become a tutor.</p>
-                        <p><strong>View Sessions</strong>, list down all the the tutorial sessions between the tutors and tutees.</p>
-                        <p><strong>View Accounts</strong>, list down all the registered accounts.</p>
-                        <p><strong>View Subjects</strong>, view all the available subjects that a tutor can teach.</p>
-                        <p><strong>Add Subjects</strong>, add a new subject for a specific program that a tutor can teach.</p>
+
+            <div class="box">
+                <div class="left-side">
+                    <div class="box_topic">Pending Requests</div>
+                    <div class="number">
+<?php
+//Fetch the count of all students with pending approval (i.e., tutor applicants)
+$studentQuery = "SELECT count(*) as numOfPendingRequests FROM student WHERE isPendingApproval=1";
+$studentResult = mysqli_query($db, $studentQuery);
+
+$numOfPendingRequests = 0;
+
+while($row = mysqli_fetch_array($studentResult)){
+    $numOfPendingRequests = $row['numOfPendingRequests'];
+}
+?>
+                    <?=$numOfPendingRequests?>
                     </div>
                 </div>
+                    <i class='bx bx-alarm-exclamation icon'></i>
             </div>
+
+            <div class="box">
+                <div class="left-side">
+                    <div class="box_topic">Tutorial Sessions</div>
+                    <div class="number">
+<?php
+//Fetch the count of all tutorial sessions 
+$studentQuery = "SELECT count(*) as numOfTutorialSessions FROM tutorial_session";
+$studentResult = mysqli_query($db, $studentQuery);
+
+$numOfTutorialSessions = 0;
+
+while($row = mysqli_fetch_array($studentResult)){
+    $numOfTutorialSessions = $row['numOfTutorialSessions'];
+}
+?>
+                    <?=$numOfTutorialSessions?>
+                    </div>
+                </div>
+                    <i class='bx bx-notepad icon' ></i>
+            </div>
+
+            <div class="box">
+                <div class="left-side">
+                    <div class="box_topic">Accounts</div>
+                    <div class="number">
+<?php
+//Fetch the count of all registered accounts 
+$studentQuery = "SELECT count(*) as numOfAccounts FROM student";
+$studentResult = mysqli_query($db, $studentQuery);
+
+$numOfAccounts = 0;
+
+while($row = mysqli_fetch_array($studentResult)){
+    $numOfAccounts = $row['numOfAccounts'];
+}
+?>
+                    <?=$numOfAccounts?>
+                    </div>
+                </div>
+                <i class='bx bx-group icon' ></i>
+            </div>
+
+            <div class="box">
+                <div class="left-side">
+                    <div class="box_topic">Subjects</div>
+                    <div class="number">
+<?php
+//Fetch the count of all registered accounts 
+$studentQuery = "SELECT count(*) as numOfSubjects FROM subject";
+$studentResult = mysqli_query($db, $studentQuery);
+
+$numOfSubjects = 0;
+
+while($row = mysqli_fetch_array($studentResult)){
+    $numOfSubjects = $row['numOfSubjects'];
+}
+?>
+                    <?=$numOfSubjects?>
+                    </div>
+                </div>
+                <i class='bx bx-layer icon' ></i>
+            </div>
+
         </div>
     </div>
 

@@ -35,10 +35,7 @@ include("tutor-sidebar.html");
 
     <div class="home-content">
         <div class="overview-boxes">
-            <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
-            <?php if(isset($_SESSION['success'])): ?>
+<?php if(isset($_SESSION['success'])): ?>
                 <div class="error success">
                     <h4>
 <?php 
@@ -48,16 +45,111 @@ unset($_SESSION['success']);
                     </h4>
                 </div>
             <?php endif ?>
-                        <h3>Welcome, <?=$_SESSION['upmail']?></h3><br />
-                        <p><strong>My Bookings</strong>, display all pending bookings and update the status.</p>
-                        <p><strong>My Subjects</strong>, list down all the the subjects you want to teach.</p>
-                        <p><strong>My Availability</strong>, take a look at your schedule.</p>
-                        <p><strong>Add a Subject</strong>, add a new subject that you want to teach.</p>
-                        <p><strong>Add Available Time</strong>, let your peers know when you will be available.</p>
+            <div class="box">
+                <div class="left-side">
+                    <div class="box_topic">My Bookings</div>
+                    <div class="number">
+<?php
+//Find the count of all the tutor's bookings 
+$query = "SELECT count(*) as numOfBookings  
+        FROM available_time at
+        JOIN tutor_available_time tat
+        ON at.available_time_id=tat.available_time_id AND at.isBooked=1
+        JOIN student s 
+        ON s.student_id=tat.tutor_id
+        WHERE s.upmail='$upmail'";
+$result = mysqli_query($db, $query);
+
+$numOfBookings = 0;
+
+while($row = mysqli_fetch_array($result)){
+    $numOfBookings = $row['numOfBookings'];
+}
+
+?>
+                    <?=$numOfBookings?>
                     </div>
                 </div>
+                <i class='bx bx-list-ul icon' ></i>
+            </div>
+
+            <div class="box">
+                <div class="left-side">
+                    <div class="box_topic">My Schedules</div>
+                    <div class="number">
+<?php
+//Find the count of all the tutor's available schedules 
+$query = "SELECT count(*) as numOfSchedules
+        FROM available_time at
+        JOIN tutor_available_time tat
+        ON at.available_time_id=tat.available_time_id
+        JOIN student s 
+        ON s.student_id=tat.tutor_id
+        WHERE s.upmail='$upmail'";
+$result = mysqli_query($db, $query);
+
+$numOfSchedules = 0;
+
+while($row = mysqli_fetch_array($result)){
+    $numOfSchedules = $row['numOfSchedules'];
+}
+
+?>
+                    <?=$numOfSchedules?>
+                    </div>
+                </div>
+                <i class='bx bx-calendar-alt icon' ></i>
+            </div>
+
+            <div class="box">
+                <div class="left-side">
+                    <div class="box_topic">My Subjects</div>
+                    <div class="number">
+<?php
+//Find the count of all the tutor's subjects 
+$query = "SELECT count(*) as numOfSubjects 
+    FROM subject s 
+    JOIN tutor_teaches tt 
+    ON s.subject_id=tt.subject_id 
+    JOIN student st 
+    ON st.student_id=tt.tutor_id 
+    WHERE upmail='$upmail'";
+$result = mysqli_query($db, $query);
+
+$numOfSubjects = 0;
+
+while($row = mysqli_fetch_array($result)){
+    $numOfSubjects = $row['numOfSubjects'];
+}
+
+?>
+                    <?=$numOfSubjects?>
+                    </div>
+                </div>
+                <i class='bx bx-layer icon' ></i>
             </div>
         </div>
+ <?php
+$query = "SELECT * from news";
+$result = mysqli_query($db, $query);
+
+while($row = mysqli_fetch_array($result)){
+    $title = $row['title'];
+    $body = $row['body'];
+    $forTutor = $row['forTutor'];
+
+    // display the news if it is visible to tutor
+    if($forTutor == '1'){
+?>       
+        <div class="big-boxes">
+            <div class="news box">
+               <div class="title"><?=$title?></div>
+               <div class="body"><?=$body?></div>
+            </div>
+        </div>
+<?php } 
+} ?>
+
     </div>
 
 </section>

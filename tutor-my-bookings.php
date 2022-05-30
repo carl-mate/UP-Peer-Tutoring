@@ -34,10 +34,8 @@ include("tutor-sidebar.html");
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
 <?php
 //Find all the tutors' pending booking requests
 $query = "SELECT at.date, at.start_time, at.end_time, at.subject, at.student_id  
@@ -108,8 +106,6 @@ foreach($result as $bookingRow){
     $i++;
 } ?>
 </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

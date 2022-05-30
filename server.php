@@ -8,7 +8,7 @@
 	// connect to database
     $servername = "localhost";
     $username = "root";
-    $password = "";
+    $password = "Mu612216";
     $dbname = "peer_tutoring";
 
     $db = new mysqli($servername, $username, $password, $dbname);
@@ -219,7 +219,7 @@
 					VALUES('$tutorID', '$subjectID')";
 			mysqli_query($db, $sql);
 			$_SESSION['success'] = "Subject added succesfully.";
-			header('location: tutor-add-a-subject.php'); // redirect to home
+			header('location: tutor-index.php'); // redirect to home
 		}
 	}
 
@@ -314,6 +314,50 @@
 			header('location: admin-index.php'); // redirect to home
 		}
 	}
+
+    // add announcement for admins 
+    if(isset($_POST['addnews'])){
+		$title = mysqli_real_escape_string($db, $_POST['title']);
+        $body = mysqli_real_escape_string($db, $_POST['body']);
+        $visibility = mysqli_real_escape_string($db, $_POST['visibility']);
+
+        $forTutor = 0;
+        $forTutee = 0;
+
+        // configure the the news' visibility
+        if($visibility == 'All'){
+            $forTutor = 1;
+            $forTutee = 1;
+        } else if($visibility == 'Tutors'){
+            $forTutor = 1;
+            $forTutee = 0;
+        } else if($visibility == 'Tutees'){
+            $forTutor = 0;
+            $forTutee = 1;
+        }
+
+
+        // make sure all fields are fillled
+        if(empty($title)){
+			array_push($errors, "Title is required.");	// add error message to errors array
+        }
+
+        if(empty($title)){
+			array_push($errors, "Body is required.");	// add error message to errors array
+        }
+
+        // if there are no errors, save news to database
+        if(count($errors) == 0){
+            $sql = "INSERT INTO news (title, body, forTutor, forTutee)
+					VALUES('$title', '$body', '$forTutor', $forTutee)";
+			mysqli_query($db, $sql);
+			$_SESSION['success'] = "News added succesfully.";
+			header('location: admin-index.php'); // redirect to home
+
+        }
+
+
+    }
 
     if(isset($_POST['pendingapproval'])){
         $approval = $_POST['acceptreject'];

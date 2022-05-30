@@ -37,10 +37,8 @@ include("tutor-sidebar.html");
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
 <div class="content">
       <h1 id="signup">Add Subject</h1>
       <form action="tutor-add-a-subject.php" method="post">
@@ -73,8 +71,6 @@ for($i = 1; $i < count($titleArray); $i++) {
         <input type="submit" value="Add" name="tutoraddsubject" />
       </form>
 </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

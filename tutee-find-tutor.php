@@ -31,10 +31,8 @@ foreach($studentResult as $row){
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
                     <div class="content">
     <p class="big-paragraph">Hello, <strong><?=$first_name . " " . $last_name?></strong>. What subject do you need help with?</p>
 <?php
@@ -70,8 +68,6 @@ for($i = 1; $i < count($titleArray); $i++) {
 </form>
 
 </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

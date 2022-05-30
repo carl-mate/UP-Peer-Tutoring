@@ -34,10 +34,8 @@ include("tutor-sidebar.html");
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
 <div class="content">
       <h1 id="log">Add Available Time</h1>
       <form action="tutor-add-available-time.php" method="post">
@@ -57,8 +55,6 @@ include("tutor-sidebar.html");
         <input type="submit" value="Add" name="tutoraddavailabletime" /> 
       </form>
 </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

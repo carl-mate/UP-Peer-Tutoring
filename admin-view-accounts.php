@@ -22,10 +22,8 @@ include("admin-sidebar.html");
     </nav>
 
     <div class="home-content">
-        <div class="overview-boxes">
+        <div class="big-boxes">
             <div class="box">
-                <div class="left-side">
-                    <div class="box_topic">
 <?php
 //Fetch all tutee
 $tuteeQuery = "SELECT * FROM student WHERE isTutor=0 OR isTutor=1";
@@ -74,8 +72,6 @@ while($row = mysqli_fetch_array($tutorResult)){
 }
 ?>
 </table>
-                  </div>
-                </div>
             </div>
         </div>
     </div>
